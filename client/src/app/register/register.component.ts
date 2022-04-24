@@ -9,29 +9,29 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class RegisterComponent implements OnInit {
   // @Input() usersFromHomeComponent:any;
-  @Output() cancelRegister=new EventEmitter();
-model: any= {};
+  @Output() cancelRegister = new EventEmitter();
+  model: any = {};
   constructor(private accountService: AccountService,
     private toastr: ToastrService) { }
 
   ngOnInit(): void {
   }
-register(){
-  console.log(this.model);
+  register() {
+    console.log(this.model);
 
-  this.accountService.register(this.model).subscribe(response => {
-console.log(response);
-this.cancel();
-  },error =>{
-    console.log(error);
-    this.toastr.error(error.error);
-  });
-}
+    this.accountService.register(this.model).subscribe(response => {
+      console.log(response);
+      this.cancel();
+    }, error => {
+      console.log(error);
+      this.toastr.error(error.error);
+    });
+  }
 
-cancel(){
-  console.log('cancelled');
+  cancel() {
+    console.log('cancelled');
 
-  this.cancelRegister.emit(false);
-}
+    this.cancelRegister.emit(false);
+  }
 
 }

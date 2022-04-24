@@ -11,57 +11,56 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent implements OnInit {
-model: any={}
+  model: any = {}
 
-// loggedIn:boolean;
-// currentUser$: Observable<User>;
-  constructor(public accountService:AccountService,
+  // loggedIn:boolean;
+  // currentUser$: Observable<User>;
+  constructor(public accountService: AccountService,
     private router: Router,
     private toastr: ToastrService) { }
 
   ngOnInit(): void {
 
-   // this.getCurrentUser();
-  //  this.currentUser$ = this.accountService.currentUser$;
+    // this.getCurrentUser();
+    //  this.currentUser$ = this.accountService.currentUser$;
   }
- login()
- {
-  /// console.log(this.model)
+  login() {
+    /// console.log(this.model)
 
 
-   this.accountService.login(this.model).subscribe(response => {
+    this.accountService.login(this.model).subscribe(response => {
       console.log(response);
       this.router.navigateByUrl('/members');
-    //  this.loggedIn=true;
+      //  this.loggedIn=true;
 
-   }
-  //  , 
-  //  error => {
-  //    console.log(error);
-  //    this.toastr.error(error.error);
-     
+    }
+      //  , 
+      //  error => {
+      //    console.log(error);
+      //    this.toastr.error(error.error);
+
+      //  }
+
+    );
+
+
+  }
+
+
+
+  logout() {
+    this.accountService.logout();
+    // this.loggedIn=false;
+    this.router.navigateByUrl('/');
+  }
+
+
+  //  getCurrentUser(){
+
+  //   this.accountService.currentUser$.subscribe(user => {
+  //     this.loggedIn = !!user;
+  //   }, error => {
+  //     console.log(error);
+  //   })
   //  }
-   
-   );
-
-
- }
-
-
-
- logout(){
-this.accountService.logout();
-  // this.loggedIn=false;
-  this.router.navigateByUrl('/');
- }
-
-
-//  getCurrentUser(){
-
-//   this.accountService.currentUser$.subscribe(user => {
-//     this.loggedIn = !!user;
-//   }, error => {
-//     console.log(error);
-//   })
-//  }
 }
