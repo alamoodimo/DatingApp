@@ -13,11 +13,12 @@ namespace API.Helpers
     {
         public AutoMapperProfiles()
         {
-             //      from object --> To Objec
-            CreateMap<AppUser,MemberDto>()
+            //      from object --> To Objec
+            CreateMap<AppUser, MemberDto>()
             .ForMember(dest => dest.photoUrl, opt => opt.MapFrom(src => src.Photos.FirstOrDefault(x => x.IsMain).Url))
-            .ForMember(dest =>dest.Age, opt => opt.MapFrom(src=>src.DateOfBirth.CalculateAge()));
-            CreateMap<Photo,PhotoDto>();
+            .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.DateOfBirth.CalculateAge()));
+            CreateMap<Photo, PhotoDto>();
+            CreateMap<MemberUpdateDto, AppUser>();
         }
     }
 }
