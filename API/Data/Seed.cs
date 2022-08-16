@@ -8,34 +8,60 @@ using System.Threading.Tasks;
 using API.Entities;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace API.Data
 {
     public class Seed
     {
-        public static async Task SeedUsers(DataContext context)
+      //  public static async Task SeedUsers(DataContext context)
+        public static async Task SeedUsers(UserManager<AppUser> userManager,
+        RoleManager<AppRole> roleManager)
         {
-            if (await context.Users.AnyAsync()) return;
+            if (await userManager.Users.AnyAsync()) return;
 
             var userData = await System.IO.File.ReadAllTextAsync("Data/UserSeedData.json");
 
            // var users1 = JsonSerializer.Deserialize<List<AppUser>>(userData);
             var users = JsonConvert.DeserializeObject<List<AppUser>>(userData);
+            if(users ==null) return;
+
+            var roles = new List<AppRole>
+            {
+                new AppRole{Name="Member"},
+                new AppRole{Name="Admin"},
+                new AppRole{Name="Moderator"},
+            };
+
+            foreach(var role in roles)
+            {
+                await roleManager.CreateAsync(role);
+            }
+
             foreach (var user in users)
             {
 
-                using var hmac = new HMACSHA512();
+              //  using var hmac = new HMACSHA512();
 
-                user.Username = user.Username.ToLower();
-                user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("pa$$w0rd"));
-                user.Passwordsalt = hmac.Key;
+                user.UserName = user.UserName.ToLower();
+               // user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("pa$$w0rd"));
+             //   user.Passwordsalt = hmac.Key;
 
-                context.Users.Add(user);
+              await  userManager.CreateAsync(user,"Pa$$w0rd");
+              await userManager.AddToRoleAsync(user,"Member");
+
 
 
             }
 
-            await context.SaveChangesAsync();
+            var admin = new AppUser
+            {
+                UserName="admin"
+            };
+            await userManager.CreateAsync(admin,"Pa$$w0rd");
+            await userManager.AddToRolesAsync(admin,new [] {"Admin","Moderator"});
+
+           // await context.SaveChangesAsync();
         }
     }
 }
