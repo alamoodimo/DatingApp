@@ -9,6 +9,10 @@
 
             <div class="card-body">
 
+                <div class="mb-2" *ngIf="(presence.onlineUsers$ | async).includes(member.username)">
+                    <i class="fa fa-user-circle text-success"></i> online now
+                </div>
+
                 <div>
                     <strong> Location: </strong>
                     <p>{{member.city}} , {{member.country}}</p>
@@ -65,7 +69,8 @@
             <tab heading='Messages' (selectTab)="onTabActivated($event)">
 
                 <!-- <p>Messages will go here</p> -->
-                <app-member-messages [messages] ="messages" [username]="member.username"></app-member-messages>
+                <!-- <app-member-messages [messages] ="messages" [username]="member.username"></app-member-messages> -->
+                <app-member-messages [username]="member.username"></app-member-messages>
             </tab>
 
         </tabset>

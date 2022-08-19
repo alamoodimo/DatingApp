@@ -2,6 +2,7 @@ import { AccountService } from './_services/account.service';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { User } from './_models/user';
+import { PresenceService } from './_services/presence.service';
 
 @Component({
   selector: 'app-root',
@@ -10,24 +11,27 @@ import { User } from './_models/user';
 })
 export class AppComponent implements OnInit {
   title = 'The Dating App';
- users: any;
- //remove private http: HttpClient from constructor
-  constructor(private accountService: AccountService)
-  {
+  users: any;
+  //remove private http: HttpClient from constructor
+  constructor(private accountService: AccountService, private presence: PresenceService) {
 
 
   }
 
 
   ngOnInit(): void {
-//  this.getUsers();
- this.setCurrentUser();
+    //  this.getUsers();
+    this.setCurrentUser();
   }
 
-  setCurrentUser(){
+  setCurrentUser() {
 
-    const user:User=JSON.parse(localStorage.getItem('user'))
-    this.accountService.setCurrentUser(user);
+    const user: User = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      this.accountService.setCurrentUser(user);
+      this.presence.createHubConnection(user);
+    }
+
   }
 
   // getUsers(){
