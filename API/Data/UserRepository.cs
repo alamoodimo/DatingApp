@@ -38,10 +38,10 @@ namespace API.Data
             return await _context.Users.Include(p => p.Photos).ToListAsync();
         }
 
-        public async Task<bool> SaveAllAsync()
-        {
-            return await _context.SaveChangesAsync() > 0;
-        }
+        // public async Task<bool> SaveAllAsync()
+        // {
+        //     return await _context.SaveChangesAsync() > 0;
+        // }
 
         public void update(AppUser user)
         {
@@ -71,11 +71,11 @@ namespace API.Data
 
             query = userParams.OrderBy switch
             {
-                "created" => query.OrderByDescending(u=> u.Created),
-                _ => query.OrderByDescending(u=> u.LastActive)
+                "created" => query.OrderByDescending(u => u.Created),
+                _ => query.OrderByDescending(u => u.LastActive)
             };
 
-            
+
             return await PagedList<MemberDto>.CreateAsync(query.ProjectTo<MemberDto>(_mapper
             .ConfigurationProvider).AsNoTracking(),
                  userParams.pageNumber, userParams.PageSize);
@@ -91,10 +91,17 @@ namespace API.Data
             //     Id = user.Id,
             //     username = user.Username
             // }).SingleOrDefaultAsync();
+                            return await _context.Users
+                .Where(x => x.UserName == username)
+                .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task<string> GetUserGender(string username)
+        {
             return await _context.Users
-.Where(x => x.UserName == username)
-.ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
-.SingleOrDefaultAsync();
+            .Where(x => x.UserName == username)
+            .Select(x => x.Gender).FirstOrDefaultAsync();
         }
     }
 }
